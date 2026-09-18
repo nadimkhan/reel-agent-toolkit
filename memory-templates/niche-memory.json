@@ -1,0 +1,67 @@
+{
+  "niche": "",
+  "niche_slug": "",
+  "audience": "",
+  "project_brief": {
+    "reel_topic": "",
+    "reel_goal": "",
+    "language_tone": "",
+    "created_at": ""
+  },
+  "research_completed": false,
+  "audience_profile": {
+    "problems": [],
+    "frustrations": [],
+    "desired_outcomes": [],
+    "questions": [],
+    "mistakes": [],
+    "objections": [],
+    "emotional_drivers": [],
+    "exact_language": []
+  },
+  "strongest_reel_topic": {
+    "problem": "",
+    "why_stop_scroll": "",
+    "current_belief": "",
+    "belief_after": "",
+    "emotional_hook": ""
+  },
+  "content_angle": {
+    "main_problem": "",
+    "current_belief": "",
+    "new_belief": "",
+    "main_insight": "",
+    "scroll_stopper": "",
+    "emotional_angle": "",
+    "angles": [],
+    "best_angle": null
+  },
+  "hooks": {
+    "text": [],
+    "verbal": [],
+    "best_text_hook": "",
+    "best_verbal_hook": ""
+  },
+  "script": {
+    "final": "",
+    "retention_improvements": []
+  },
+  "cta": {
+    "options": [],
+    "recommended": "",
+    "hook_caption": "",
+    "on_screen_text": [],
+    "hashtags": []
+  },
+  "current_phase": 0,
+  "phases": {
+    "phase1": { "status": "pending", "verified": false, "output": null },
+    "phase2": { "status": "pending", "verified": false, "output": null },
+    "phase3": { "status": "pending", "verified": false, "output": null },
+    "phase4": { "status": "pending", "verified": false, "output": null },
+    "phase5": { "status": "pending", "verified": false, "output": null }
+  },
+  "all_phases_complete": false,
+  "created_at": "",
+  "updated_at": ""
+}
