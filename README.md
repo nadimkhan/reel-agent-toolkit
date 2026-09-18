@@ -67,11 +67,11 @@ All niche data lives at:
 ## Status
 
 - [x] Repo scaffold
-- [ ] Phase 1 agent validated
-- [ ] Phase 2 agent validated
-- [ ] Phase 3 agent validated
-- [ ] Phase 4 agent validated
-- [ ] Phase 5 agent validated
-- [ ] Orchestrator validated
+- [x] Phase 1 agent validated
+- [x] Phase 2 agent validated
+- [x] Phase 3 agent validated
+- [x] Phase 4 agent validated
+- [x] Phase 5 agent validated
+- [x] Orchestrator validated
 - [ ] init-niche.sh script
 - [ ] Telegram integration (Phase 2)

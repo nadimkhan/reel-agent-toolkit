@@ -1,0 +1,259 @@
+{
+  "niche": "Historical Documentaries",
+  "niche_slug": "historical-documentaries",
+  "audience": "History enthusiasts ages 25-55 who consume documentary content on YouTube/Instagram \u2014 curious minds who enjoy learning through visual storytelling, value intellectual engagement, and love sharing 'mind-blowing' facts with friends",
+  "project_brief": {
+    "reel_topic": "",
+    "reel_goal": "",
+    "language_tone": "",
+    "created_at": ""
+  },
+  "research_completed": true,
+  "audience_profile": {
+    "problems": [
+      "AI-generated 'slop' flooding YouTube with terrible thumbnails and factually wrong content",
+      "History channels flattening complex figures into 'stupid cartoon characters'",
+      "Channels recycling myths that were debunked decades ago and presenting legend as fact",
+      "Lifeless narrators who talk over experts and even contradict them",
+      "Bad reenactments with wrong soldier silhouettes that break immersion and trust",
+      "History Channel becoming 'Hitler Channel' \u2014 hyper-focused on WWII to the exclusion of everything else",
+      "Channels releasing overly long bloated videos when the same info could be concise",
+      "The algorithm doesn't surface quality history content \u2014 good channels get buried",
+      "Difficulty distinguishing reliable channels from unreliable 'AI money machines'",
+      "Lack of coverage of underrated periods: Eastern Front WW1, African history, Haitian Revolution, Etruscans, Industrial Revolution"
+    ],
+    "frustrations": [
+      "'They distill complicated information in a way that renders it into complete far' \u2014 oversimplification kills nuance",
+      "'Instead of letting the expert lead, a lifeless narrator is given that job' \u2014 expert voice suppressed",
+      "'They flatten every historical figure into a stupid cartoon character' \u2014 no depth, no complexity",
+      "'Recycle myths that got debunked decades ago' \u2014 pseudohistory presented as fact",
+      "'Terrible AI generated thumbnail and incredibly stupid content' \u2014 AI slop is obvious and insulting",
+      "History videos using incorrect visuals (e.g., wrong soldier silhouettes for SS divisions)",
+      "Channels 'going down the route they have' for money rather than quality \u2014 feels like selling out",
+      "Quality channels like Drachinafel, C&Rsenal are 'good to fall asleep to' but hard to find actively",
+      "Overly long 2+ hour videos that could be 15-minute sharp edits",
+      "Underrepresented topics: 'I'd personally say the Etruscan civilization... unfortunately pretty much all' gone"
+    ],
+    "desired_outcomes": [
+      "Feel intellectually engaged and 'not bored' \u2014 history should be as compelling as fiction",
+      "Actually learn something substantive, not just surface-level trivia",
+      "Have 'mind-blowing' facts to share with friends and feel like the interesting one",
+      "Understand how the past connects to the present \u2014 history as context for today",
+      "Find credible sources they can trust \u2014 'what YouTube channels are creditable when talking about history?'",
+      "Discover hidden histories and overlooked stories no one talks about",
+      "Feel the emotional weight of historical events \u2014 not just dry facts",
+      "Find content that respects their intelligence while still being entertaining",
+      "Feel less alone in their interest \u2014 'I always come back to the fact that 80% of why I study history is because I want to'",
+      "Get the 'real story' vs sanitized Hollywood versions \u2014 'Want history? Watch a documentary'"
+    ],
+    "questions": [
+      "What weird historical event actually happened that sounds fake?",
+      "What's the story they didn't teach you in school?",
+      "What does the map of the world look like 500 years before the version we know?",
+      "What was the most improbable victory in history?",
+      "Who were the most underrated historical figures nobody talks about?",
+      "What's the darkest/funniest/strangest thing that actually happened in history?",
+      "How did this empire actually fall? (vs the myth)",
+      "What would have happened if [X] never occurred?",
+      "What's the historical context behind something I see in the news today?",
+      "What did people 2000 years ago know that we forget they knew?"
+    ],
+    "mistakes": [
+      "Treating historical movies as history \u2014 'Anyone who cites any movie in a historical discussion is, frankly, a fool'",
+      "Accepting the first historical account without cross-referencing \u2014 'History is written by the victors'",
+      "Relying on only mainstream channels (History Channel, etc.) and missing the full picture",
+      "Thinking 'WWII' = all of history \u2014 missing 99% of human experience",
+      "Watching AI slop and thinking you're learning real history",
+      "Over-simplifying complex historical events into single 'good guy vs bad guy' narratives",
+      "Ignoring primary sources \u2014 just watching documentaries without reading",
+      "Accepting myths because they're repeated often \u2014 'popular legend as fact'",
+      "Assuming history is 'boring' because school taught it badly",
+      "Thinking history doesn't repeat or inform the present"
+    ],
+    "objections": [
+      "'History is boring' \u2014 they've only seen sanitized, poorly told versions",
+      "'It's just entertainment, not real learning' \u2014 documentaries feel like a cop-out",
+      "'I don't have time for 2-hour documentaries' \u2014 too big a time commitment",
+      "'Everything online is inaccurate anyway' \u2014 trust issues with content",
+      "'I'm not an academic, why does it matter?' \u2014 perceived lack of relevance",
+      "'I already know the basics from school' \u2014 think they've learned enough",
+      "'What's the point? It can't change anything' \u2014 skepticism about practical value",
+      "'These YouTube guys are just in it for the money' \u2014 authenticity concerns",
+      "'My friend/aunt says the opposite' \u2014 conflicting sources create doubt",
+      "'This just feels like trauma porn' \u2014 history focusing only on suffering"
+    ],
+    "emotional_drivers": [
+      "Intellectual stimulation \u2014 crave learning, mental engagement, feeling smart",
+      "Discovery and wonder \u2014 'TIL', 'holy shit', 'you can't make this up' moments",
+      "Social currency \u2014 having facts to share that impress friends and make them the interesting one",
+      "Righteous correction \u2014 exposing myths, being the one who 'actually knows'",
+      "Nostalgia for adventures they'd have missed \u2014 vicarious exploration of the past",
+      "Meaning and pattern \u2014 feeling history connects to their own life and today's world",
+      "Awe at human absurdity \u2014 'history is way weirder than you think'",
+      "Exclusivity \u2014 knowing obscure facts makes them feel like part of an in-group",
+      "Emotional resonance \u2014 feeling moved by stories of real humans who lived and died",
+      "Escape from mundane present \u2014 diving into dramatic, cinematic past"
+    ],
+    "exact_language": [
+      "mind-blowing facts",
+      "sounds fake but is real",
+      "had to fact-check twice",
+      "you can't make this up",
+      "history is way weirder than you think",
+      "TIL (Today I Learned)",
+      "holy shit history",
+      "interesting as fuck",
+      "real story vs Hollywood version",
+      "underrated period/figure",
+      "hidden history",
+      "based take",
+      "historian tea (spicy gossip)",
+      "cope and seethe",
+      "they don't teach you this in school",
+      "the map looks completely different",
+      "what they don't tell you",
+      "actual footage of [event] changed me",
+      "this one fact explains everything",
+      "the real reason [X] happened"
+    ]
+  },
+  "strongest_reel_topic": {
+    "problem": "The audience is tired of samey WWII documentaries and Hollywood myth-making. They crave improbable true stories that challenge what they thought they knew \u2014 victories that shouldn't have happened, empires that fell to tiny forces, events so strange fiction wouldn't dare invent them.",
+    "why_stop_scroll": "The sheer scale of the contradiction \u2014 '168 men conquered an empire of 12 million' \u2014 creates immediate cognitive dissonance. The brain HAS to know how. The numbers are so absurd they demand a second look.",
+    "current_belief": "Big empires fall to bigger armies. That's how history works.",
+    "belief_after": "History is stranger and more chaotic than we think. The 'obvious' outcome rarely happened \u2014 and knowing this makes you smarter than the movies.",
+    "emotional_hook": "You share this at a dinner party and everyone stops talking. Not because you're showing a clip \u2014 because your words alone are more cinematic than what Hollywood would write."
+  },
+  "content_angle": {
+    "main_problem": "History fans are drowning in AI slop, rehashed WWII content, and sanitized Hollywood narratives. They're hungry for true stories so wild they sound made up.",
+    "current_belief": "History is what happened in the past \u2014 straightforward facts.",
+    "new_belief": "History is a chaos of improbable victories, absurd coincidences, and hidden stories that reality itself wouldn't greenlight if it were fiction.",
+    "main_insight": "The most shareable history content isn't the 'greatest hits' \u2014 it's the weird, the improbable, and the overlooked that make you sound like the most interesting person in the room.",
+    "scroll_stopper": "Specific numbers that create instant cognitive dissonance (168 vs 12 million). The viewer has to understand how, and understanding requires watching.",
+    "emotional_angle": "Discovery + Social Currency + Righteous Correction. The viewer feels smart, feels unique, and has something to share.",
+    "angles": [
+      "Improbable victories: 168 conquistadors vs Inca",
+      "Simultaneous inventions across civilizations",
+      "The one person who changed everything by accident",
+      "Forgotten empires nobody teaches you about",
+      "History that sounds like movie plot holes"
+    ],
+    "best_angle": "Improbable victories \u2014 the historical events that had no business turning out the way they did"
+  },
+  "hooks": {
+    "text": [
+      "168 vs 12 million. Sounds fake but is real.",
+      "They don't teach you this improbable victory in school.",
+      "History is way weirder than you think.",
+      "You can't make this up. 168 men conquered an empire.",
+      "Mind-blowing facts about the real reason empires fell."
+    ],
+    "verbal": [
+      "Everyone thinks the Titanic's story is simple. It wasn't. Here's the warning they ignored the night before.",
+      "You know those 'mind-blowing facts' you send your friends at 11pm? This one's better.",
+      "They don't teach you in school how close this came out completely differently \u2014 one man, one mistake, everything changed.",
+      "Holy shit history \u2014 a messenger got lost and accidentally conquered an empire. I had to fact-check this twice.",
+      "History is way weirder than you think. And this improbable victory proves empires don't fall the way they should."
+    ],
+    "best_text_hook": "168 vs 12 million. Sounds fake but is real.",
+    "best_verbal_hook": "You know that feeling when you learn something so wild you immediately send it to everyone? This is that \u2014 except the real story is even more absurd than what they'd write in a movie."
+  },
+  "script": {
+    "final": "",
+    "retention_improvements": []
+  },
+  "cta": {
+    "options": [
+      "Send this to someone who loves mind-blowing history facts.",
+      "Text the friend who swears history class was boring.",
+      "Drop this in a group chat and watch them fact-check it.",
+      "Forward it to anyone who thinks history is just dates and names.",
+      "Tag someone who needs to know empires fell to tiny forces."
+    ],
+    "recommended": "Send this to someone who loves mind-blowing history facts.",
+    "recommended_justification": "Directly mirrors the audience's own behavior \u2014 they already send 'mind-blowing facts' to friends at 11pm. This CTA validates that impulse and gives them permission. It speaks to the top emotional driver: social currency. The phrasing matches the audience's exact language ('mind-blowing facts') so it feels native, not like an ad.",
+    "hook_caption": "The real Pizarro story is weirder than what Hollywood wrote. 168 men. 12 million people. One emperor. You can't make this up.",
+    "on_screen_text": [
+      "168 CONQUISTADORS vs 12 MILLION PEOPLE",
+      "NOT A TYPO.",
+      "EMPIRES DON'T FALL THE WAY THEY SHOULD"
+    ],
+    "hashtags": [
+      "#ImprobableVictories",
+      "#Conquistadors",
+      "#IncaEmpire",
+      "#PizarroAtahualpa",
+      "#HistoryNobodyTeaches"
+    ]
+  },
+  "phase2_strategy": {
+    "status": "complete",
+    "main_problem": "History fans are drowning in AI slop, rehashed WWII content, and sanitized Hollywood narratives. They're hungry for true stories so wild they sound made up \u2014 but the algorithm and mainstream channels keep serving them the same surface-level 'greatest hits.'",
+    "current_belief": "History is what happened in the past \u2014 straightforward facts, big armies win, empires fall to bigger empires.",
+    "new_belief": "History is a chaos of improbable victories, absurd coincidences, and hidden stories that reality itself wouldn't greenlight if it were fiction.",
+    "main_insight": "The most shareable history content isn't the 'greatest hits' \u2014 it's the weird, the improbable, and the overlooked that make you sound like the most interesting person in the room.",
+    "scroll_stopper": "Specific numbers that create instant cognitive dissonance (168 vs 12 million). The viewer has to understand how, and understanding requires watching.",
+    "emotional_angle": "Discovery + Social Currency + Righteous Correction. The viewer leaves feeling smart, feels unique in what they know, and has a 'mind-blowing fact' to share at dinner \u2014 making them the interesting one.",
+    "three_angles": [
+      {
+        "angle_number": 1,
+        "name": "Improbable Victories \u2014 Tiny Forces That Toppled Empires",
+        "framing": "Set up the impossible odds upfront. 168 conquistadors. 12 million people. The numbers are so absurd the viewer must know how. Deliver the 'you can't make this up' real story \u2014 Pizarro's capture of Atahualpa \u2014 as a tight, cinematic narrative. End with the takeaway that history is way weirder than any movie.",
+        "belief_shift": "From 'big empires fall to bigger armies' \u2192 'the obvious outcome rarely happened \u2014 and knowing this makes you smarter than the movies'",
+        "why_it_works": "Taps directly into the audience's top question: 'What was the most improbable victory in history?' The numbers create instant cognitive dissonance \u2014 the brain HAS to understand. This is the format they've already rated as strongest. Discovery + social currency in one package.",
+        "best_audience_segment": "Fans of 'TIL' and 'mind-blowing facts' \u2014 the sharers and the conversation-starters. Broader appeal, highest share potential."
+      },
+      {
+        "angle_number": 2,
+        "name": "Simultaneous Discoveries \u2014 The Pattern Nobody Noticed",
+        "framing": "Two civilizations, same invention, zero contact. Newton and Leibniz. Darwin and Wallace. The pattern: the same breakthrough happening independently across the world \u2014 not because of collaboration, but because the human mind arrives at the same truth when the conditions are right.",
+        "belief_shift": "From 'great minds work alone, geniuses are singular' \u2192 'human discovery is a collective process \u2014 the same ideas surface again and again when the moment is right'",
+        "why_it_works": "Satisfies the intellectual stimulation driver and the 'hidden history' desire. Works for viewers who love science and philosophy alongside history. The 'they don't teach you this in school' angle activates the exclusivity driver.",
+        "best_audience_segment": "STEM-curious viewers and the 'meaning and pattern' seekers \u2014 those who want to understand how knowledge actually develops, not just what happened."
+      },
+      {
+        "angle_number": 3,
+        "name": "The Accident That Changed Everything",
+        "framing": "The fall of Constantinople. The misread telegram. The courier who got lost. History's biggest turning points weren't planned \u2014 they were accidents, coincidences, and misunderstandings that someone had the wit to exploit. This is the 'real reason [X] happened' angle.",
+        "belief_shift": "From 'powerful people planned history, everything happened for a reason' \u2192 'history is chaotic and contingent \u2014 the accident of one person or one day reshaped everything'",
+        "why_it_works": "Activates the 'what they don't tell you' and 'the real reason [X] happened' language directly. Satisfies the desire to feel like you know the 'real story vs Hollywood version.' Appeals to the contrarian streak \u2014 you were taught X, but actually it was a happy accident.",
+        "best_audience_segment": "Contrarians and the 'righteous correction' crowd \u2014 those who love being the one who 'actually knows' the real story behind commonly misunderstood events."
+      }
+    ],
+    "recommended_angle": {
+      "angle_number": 1,
+      "name": "Improbable Victories \u2014 Tiny Forces That Toppled Empires",
+      "justification": "This is the only angle directly validated by Phase 1 data as the audience's own expressed curiosity ('What was the most improbable victory in history?'). The 168 conquistadors vs 12 million hook creates genuine cognitive dissonance \u2014 the numbers are so absurd they physically cannot scroll past. It simultaneously activates three emotional drivers: Discovery (the wow moment), Social Currency (sharing at dinner), and Righteous Correction (the real story vs Hollywood). It is also the specific scenario the audience research identified as the strongest reel topic. All other angles are plausible; this one is tested."
+    }
+  },
+  "current_phase": 5,
+  "phases": {
+    "phase1": {
+      "status": "completed",
+      "verified": true,
+      "output": "audience_profile + strongest_reel_topic"
+    },
+    "phase2": {
+      "status": "complete",
+      "verified": true,
+      "output": "phase2_strategy: main_problem, current_belief, new_belief, main_insight, scroll_stopper, emotional_angle, three_angles, recommended_angle"
+    },
+    "phase3": {
+      "status": "complete",
+      "verified": true,
+      "output": "hooks: 5 text hooks + 5 verbal hooks + best_text_hook + best_verbal_hook"
+    },
+    "phase4": {
+      "status": "complete",
+      "verified": true,
+      "output": "script.final.md + script.retention_improvements.md"
+    },
+    "phase5": {
+      "status": "complete",
+      "verified": true,
+      "output": "cta.options, cta.recommended, cta.recommended_justification, cta.on_screen_text, cta.hashtags, cta.hook_caption"
+    }
+  },
+  "all_phases_complete": true,
+  "updated_at": "2026-09-18T23:11:25Z"
+}
