@@ -18,7 +18,7 @@ if [ -z "$NICHE_NAME" ]; then
 fi
 
 # Compute slug
-NICHE_SLUG=$(echo "$NICHE_NAME" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]+/-/g' | sed 's/^-//g' | sed 's/-$//g')
+NICHE_SLUG=$(python3 -c "import sys; print(sys.argv[1].lower().replace(' ', '-').replace('/' , '-'))" "$NICHE_NAME")
 NICHE_DIR="$NICHES_DIR/$NICHE_SLUG"
 MEMORY_FILE="$NICHE_DIR/memory.json"
 
@@ -44,8 +44,7 @@ with open('$MEMORY_FILE', 'r') as f:
     data = json.load(f)
 data['niche'] = '$NICHE_NAME'
 data['niche_slug'] = '$NICHE_SLUG'
-data['created_at'] = $(date -u +%Y-%m-%dT%H:%M:%SZ)
-import json
+data['created_at'] = __import__('datetime').datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
 with open('$MEMORY_FILE', 'w') as f:
     json.dump(data, f, indent=2)
 "
