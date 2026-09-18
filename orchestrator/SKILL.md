@@ -1,91 +1,119 @@
 ---
 name: reel-agent-orchestrator
-description: Main entry point for the AI Viral Reel Script Toolkit. Use when starting a new reel script project or continuing a paused pipeline.
+description: Main entry for the AI Viral Reel Script Toolkit. Handles both pipeline mode (new niche/topic) and daily content mode (generate videos and shorts on demand).
 ---
 
 # Reel Agent Toolkit — Orchestrator
 
-## Role
+## Two Modes
 
-You are the orchestrator of the AI Viral Reel Script Toolkit. Your job is to:
-1. Receive the niche and project brief from the human
-2. Check if a memory file exists for this niche
-3. Determine which phase to resume from
-4. Spawn each phase agent in sequence, pausing for human verification between each
-5. Save all outputs to the niche memory file
-6. Deliver the final script package
+### Mode 1: Pipeline Mode
+Use when setting up a new niche or a new topic within an existing niche that needs full audience research.
 
-## Niche Memory Location
+**Trigger phrases:** "new niche", "new topic", "start project", "new reel", "setup niche"
 
-```
-~/.hermes/reel-agent/niches/<niche-slug>/memory.json
-```
+### Mode 2: Daily Content Mode
+Use when the user wants to generate video scripts or shorts for an already-researched niche without re-running research.
 
-Compute the niche slug as: lowercase, spaces replaced with hyphens, special characters removed.
+**Trigger phrases:** "generate", "create content", "make videos", "write scripts", "daily content", "video ideas", followed by a niche name
 
-## Pipeline Phases
+---
 
-| Phase | Skill | Purpose |
-|-------|-------|---------|
-| 1 | `reel-agent-phase1-audience-research` | Research the niche audience |
-| 2 | `reel-agent-phase2-content-strategy` | Choose and justify the best content angle |
-| 3 | `reel-agent-phase3-hook-generator` | Generate and rank hooks |
-| 4 | `reel-agent-phase4-script-writer` | Write the full script |
-| 5 | `reel-agent-phase5-cta-polish` | Finalize CTA and on-screen text |
+## Mode 1: Pipeline Mode
 
-## Starting a New Project
-
-When the human says "new reel" or "start project" or provides a new niche:
-
-**Step 1:** Ask for:
+### Step 1: Collect Brief
+Ask for:
 1. Niche
 2. Target Audience (one sentence)
 3. Reel Topic / Idea
 4. Reel Goal (followers / comments / saves / shares / leads-sales)
 5. Language / Tone (Hindi / Hinglish / English / Other)
 
-**Step 2:** Initialize the memory file from the template at `~/.hermes/reel-agent-toolkit/memory-templates/niche-memory.json`
+### Step 2: Initialize Memory
+Memory file: `~/.hermes/reel-agent/niches/<niche-slug>/memory.json`
+- If exists: load and check `research_completed`
+- If not: create from template `~/.hermes/reel-agent-toolkit/memory-templates/niche-memory.json`
+- Save project brief under `project_brief`
+- Set `current_phase = 1`
 
-**Step 3:** Save the project brief to memory file under `project_brief`
+### Step 3: Run Phases 1-5 with Verification
+Sequentially, with human verification after each:
 
-**Step 4:** Load Phase 1 skill and spawn it via `delegate_task` with context:
+| Phase | Skill | Task |
+|-------|-------|------|
+| 1 | `reel-agent-phase1-audience-research` | Web research: 10 problems, frustrations, desires, questions, mistakes, objections, emotional drivers, exact language |
+| 2 | `reel-agent-phase2-content-strategy` | Best content angle, belief shift, scroll-stopper, 3 angle options |
+| 3 | `reel-agent-phase3-hook-generator` | 5 text hooks + 5 verbal hooks, pick strongest pair |
+| 4 | `reel-agent-phase4-script-writer` | Full Hook→Value→Solution→CTA script, retention optimized |
+| 5 | `reel-agent-phase5-cta-polish` | 5 CTA options, recommended CTA, on-screen text, hashtags, hook caption |
+
+### Step 4: Save & Present Final Deliverable
+After Phase 5 verification:
 ```
-Niche: <niche>
-Target Audience: <audience>
-Memory file: <path>
+# FINAL DELIVERABLE — <Niche>
+
+## Audience Insight
+## Best Content Angle
+## Best Text Hook
+## Best Verbal Hook
+## Final Reel Script
+## Retention Improvements
+## 5 CTA Options
+## Final Recommended CTA
+## On-Screen Text / Keywords
+
+Saved to: ~/.hermes/reel-agent/niches/<slug>/memory.json
 ```
-
-## Resuming a Project
-
-When the human says "continue" or "next phase":
-
-**Step 1:** Load the niche memory file
-
-**Step 2:** Find the last completed phase (check `current_phase` and `phases` object)
-
-**Step 3:** Present a status summary:
-```
-Niche: <niche>
-Current Phase: <N>
-Completed: <list of phases>
-Ready to run: <next phase>
-```
-
-**Step 4:** If human approves, load the next phase skill and spawn it
-
-## Presenting Phase Output
-
-After each phase agent completes, present the output to the human clearly:
-
-```
-## Phase N: <Phase Name> — COMPLETE
-
-<output summary>
 
 ---
-[ VERIFY THIS OUTPUT ]
-Approve to continue to Phase N+1, or tell me what to adjust.
-```
+
+## Mode 2: Daily Content Mode
+
+### Step 1: Identify Niche
+Parse the user's request:
+- Niche name
+- Number of long-form videos
+- Duration per video
+- Number of shorts
+- Duration per short
+
+Example request: "generate 2 videos of 10 mins and 5 shorts of 30-60 sec for Historical Documentaries"
+
+Extract:
+- Niche: Historical Documentaries
+- Long videos: 2 × 10 min
+- Shorts: 5 × 30-60 sec
+
+### Step 2: Load Niche Memory
+Load `~/.hermes/reel-agent/niches/<niche-slug>/memory.json`
+- Verify `research_completed = true` and `audience_profile` has data
+- If no memory file exists or research not done: tell the user to run Pipeline Mode first
+
+### Step 3: Generate Topic Ideas
+Using niche memory data (audience profile, content angles, hooks, exact language):
+- Generate N topic ideas for long-form videos (matching the stored content angles)
+- Generate M topic ideas for shorts
+
+Present topics for user approval.
+
+### Step 4: On Topic Approval — Generate Full Scripts
+For each approved topic:
+- Write full script (Hook → Value → Solution → CTA)
+- Duration: calibrated to requested length (10 min ≈ 1300-1500 words, 30-60 sec ≈ 80-130 words)
+- Use stored audience language, hooks, and content angle
+- Save each script to `~/.hermes/reel-agent/niches/<slug>/sessions/<session-date>/`
+
+### Step 5: Present Output
+Present all scripts in clean format with:
+- Topic name
+- Duration
+- Full script (TTS-ready)
+- CTA
+
+### Step 6: Save Session
+Save session summary to niche memory under `sessions` array.
+
+---
 
 ## Memory File Schema
 
@@ -101,7 +129,16 @@ Approve to continue to Phase N+1, or tell me what to adjust.
     "created_at": "ISO date"
   },
   "research_completed": false,
-  "audience_profile": { ... },
+  "audience_profile": {
+    "problems": [],
+    "frustrations": [],
+    "desired_outcomes": [],
+    "questions": [],
+    "mistakes": [],
+    "objections": [],
+    "emotional_drivers": [],
+    "exact_language": []
+  },
   "strongest_reel_topic": { ... },
   "content_angle": { ... },
   "hooks": {
@@ -117,62 +154,35 @@ Approve to continue to Phase N+1, or tell me what to adjust.
   "cta": {
     "options": [],
     "recommended": "string",
-    "on_screen_text": "string"
+    "hook_caption": "string",
+    "on_screen_text": [],
+    "hashtags": []
   },
   "current_phase": 0,
   "phases": {
-    "phase1": { "status": "pending|complete", "verified": false, "output": {} },
-    "phase2": { "status": "pending|complete", "verified": false, "output": {} },
-    "phase3": { "status": "pending|complete", "verified": false, "output": {} },
-    "phase4": { "status": "pending|complete", "verified": false, "output": {} },
-    "phase5": { "status": "pending|complete", "verified": false, "output": {} }
+    "phase1": { "status": "pending", "verified": false, "output": null },
+    "phase2": { "status": "pending", "verified": false, "output": null },
+    "phase3": { "status": "pending", "verified": false, "output": null },
+    "phase4": { "status": "pending", "verified": false, "output": null },
+    "phase5": { "status": "pending", "verified": false, "output": null }
   },
+  "all_phases_complete": false,
+  "sessions": [
+    {
+      "session_id": "string",
+      "date": "ISO date",
+      "long_videos": [{ "topic": "string", "duration": "string", "script": "string" }],
+      "shorts": [{ "topic": "string", "duration": "string", "script": "string" }]
+    }
+  ],
   "created_at": "ISO date",
   "updated_at": "ISO date"
 }
 ```
 
-## Verification Rules
-
-- Never skip the human verification step between phases
-- Never auto-continue without explicit human approval
-- If the human requests changes, reload the phase skill, apply the feedback, and re-run only that phase
-- On approval: update `phases.phaseX.verified = true`, save to memory, advance to next phase
-
-## Final Output (after Phase 5)
-
-When Phase 5 is verified complete, present the full script package:
-
-```
-# FINAL DELIVERABLE — <Niche>
-
-## Audience Insight
-<summary>
-
-## Best Content Angle
-<summary>
-
-## Best Text Hook
-<summary>
-
-## Best Verbal Hook
-<summary>
-
-## Final Reel Script
-<full script>
-
-## Retention Improvements
-<list>
-
-## 5 CTA Options
-<numbered list>
-
-## Final Recommended CTA
-<selected CTA>
-
-## On-Screen Text / Keywords
-<text>
-
 ---
-Saved to: ~/.hermes/reel-agent/niches/<slug>/memory.json
-```
+
+## Niche Memory Location
+
+All niche data: `~/.hermes/reel-agent/niches/<niche-slug>/memory.json`
+Source repo: `~/.hermes/reel-agent-toolkit/`
