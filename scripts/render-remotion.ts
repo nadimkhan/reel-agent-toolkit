@@ -116,7 +116,14 @@ function startServer(port: number, bundleDir: string): Promise<{ server: http.Se
       }
 
       // Serve project files
-      const filePath = join(PROJECT_ROOT, urlPath);
+      // Try multiple locations: public/ for static assets, root for sessions
+      let filePath = join(PROJECT_ROOT, "public", urlPath);
+      if (!existsSync(filePath)) {
+        filePath = join(PROJECT_ROOT, urlPath);
+      }
+      if (!existsSync(filePath)) {
+        filePath = join(PROJECT_ROOT, "sessions", urlPath);
+      }
       const range = req.headers.range;
       if (range && existsSync(filePath) && statSync(filePath).isFile()) {
         const stat = statSync(filePath);
@@ -178,17 +185,28 @@ async function main() {
   }
   console.log("\n[render] Durations measured");
 
-  // Build timeline
+  // Build timeline — convert absolute paths to URL paths for the static server
+  const PROJECT_ROOT_URL = "/sessions";
   let cursor = 0;
   const scenes = manifest.scenes.map((s: any, i: number) => {
     const durationInFrames = Math.max(sceneDurations[i], FPS);
     const startFrame = cursor;
     const endFrame = cursor + durationInFrames;
     cursor = endFrame;
+
+    // Convert absolute paths to URL paths: /home/nadim/.../sessions/slug/.../scene_000/image.png
+    // → /sessions/slug/.../scene_000/image.png
+    const imageUrl = s.imagePath
+      ? s.imagePath.replace(/^\/home\/nadim\/projects\/reel-agent-toolkit\//, "/")
+      : s.imagePath;
+    const audioUrl = s.audioPath
+      ? s.audioPath.replace(/^\/home\/nadim\/projects\/reel-agent-toolkit\//, "/")
+      : s.audioPath;
+
     return {
       id: `scene-${i}`,
-      imageSrc: s.imagePath,
-      audioSrc: s.audioPath,
+      imageSrc: imageUrl,
+      audioSrc: audioUrl,
       narration: s.narration,
       startFrame,
       durationInFrames,
@@ -225,7 +243,7 @@ async function main() {
   mkdirSync(BUNDLE_OUT, { recursive: true });
   console.log("[render] Bundling Remotion project...");
   const bundleLocation = await bundle(
-    join(PROJECT_ROOT, "remotion", "index.tsx"),
+    join(PROJECT_ROOT, "remotion", "RemotionRoot.tsx"),
     (p: number) => process.stdout.write(` ${Math.round(p * 100)}%`),
     { outDir: BUNDLE_OUT }
   );
@@ -289,8 +307,10 @@ async function main() {
     const concatList = join("/tmp", `concat-${Date.now()}.txt`);
     const concatEntries: string[] = [];
     for (const scene of scenes) {
-      if (scene.audioSrc && existsSync(scene.audioSrc)) {
-        concatEntries.push(`file '${scene.audioSrc.replace(/'/g, "'\\''")}'`);
+      // Use the original absolute path for ffmpeg concat
+      const audioPath = manifest.scenes[scenes.indexOf(scene)]?.audioPath;
+      if (audioPath && existsSync(audioPath)) {
+        concatEntries.push(`file '${audioPath.replace(/'/g, "'\\''")}'`);
       }
     }
 
@@ -302,7 +322,8 @@ async function main() {
       ffmpegArgs.push("-f", "concat", "-safe", "0", "-i", concatList);
     }
 
-    if (gpuDevice) {
+    if (false && gpuDevice) {
+      // VAAPI disabled — causes crashes on this system
       ffmpegArgs.push(
         "-vaapi_device", gpuDevice,
         "-c:v", "h264_vaapi",
@@ -311,7 +332,7 @@ async function main() {
         "-b:v", "8M",
       );
     } else {
-      ffmpegArgs.push("-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "23");
+      ffmpegArgs.push("-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "22", "-preset", "fast");
     }
 
     ffmpegArgs.push(
