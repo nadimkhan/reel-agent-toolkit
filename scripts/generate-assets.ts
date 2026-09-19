@@ -60,6 +60,11 @@ if (!existsSync(scriptFile)) {
   process.exit(1)
 }
 
+// ── Session dirs ──────────────────────────────────────────────────────────────
+const sessionDir = join(PROJECT_ROOT, 'sessions', slug, today)
+const assetsDir = join(sessionDir, 'assets')
+mkdirSync(assetsDir, { recursive: true })
+
 // ── Load session.json for art_style / era / voice (if it exists) ───────────────
 const sessionJsonPath = join(sessionDir, 'session.json')
 let sessionData: any = {}
@@ -88,11 +93,6 @@ const scriptBody = scriptContent
   .replace(/^.*?(?:HOOK|SCRIPT BODY|SOLUTION|CTA).*$/gim, '')
   .replace(/\n{3,}/g, '\n\n')
   .trim()
-
-// ── Session dirs ──────────────────────────────────────────────────────────────
-const sessionDir = join(PROJECT_ROOT, 'sessions', slug, today)
-const assetsDir = join(sessionDir, 'assets')
-mkdirSync(assetsDir, { recursive: true })
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 function fmtTime(sec: number): string {

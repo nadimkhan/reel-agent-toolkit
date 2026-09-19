@@ -10,7 +10,11 @@ Multi-agent system for AI Viral Reel content. Two modes:
 ## Mode A: New Niche Pipeline
 
 ```
-User → Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6 → Phase 7 → Phase 8
+Pipeline Mode (new niche):
+Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6 → Phase 7 → Phase 8
+
+Daily Content Mode (existing niche):
+Phase 6 → Phase 7 → Phase 8 → Phase 9
 ```
 
 Run niche init: `npx tsx scripts/init-niche.ts <slug>`
@@ -27,9 +31,9 @@ User → Phase 6 (script) → Phase 7 (scenes) → Phase 8 (assets) → Remotion
 |-------|------|--------|
 | 1 | Audience Research | `memory.json` — niche, category, platform |
 | 2 | Content Strategy | `memory.json` — angles, hooks, top topics |
-| 3 | Series Design | `memory.json` — series, art style, scene styles |
-| 4 | Script Generation | `sessions/<date>/LF*.md`, `SHORT*.md` |
-| 5 | Script Verification | (human review — never auto-proceed) |
+| 3 | (pipeline mode only) | |
+| 4 | (pipeline mode only) | |
+| 5 | (pipeline mode only) |
 | 6 | Daily Content | `sessions/<date>/LF*.md`, `SHORT*.md` |
 | 7 | Scene Generator | `sessions/<slug>/<date>/scenes.json` |
 | 8 | Asset Generator | `sessions/<slug>/<date>/assets/` |

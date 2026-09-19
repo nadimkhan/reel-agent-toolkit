@@ -30,11 +30,11 @@ If any are missing, ask the user before proceeding. Present available Azure voic
 
 Pick a voice for narration. Recommended for documentary:
 
-1. **en-US-AvaNeural** — Female, US, warm and engaging
-2. **en-US-AndrewNeural** — Male, US, deep and authoritative
-3. **en-GB-AdaNeural** — Female, UK, refined and articulate
-4. **en-GB-OllieNeural** — Male, UK, measured and compelling
-5. **en-IN-DiyaNeural** — Female, India, clear and expressive
+1. **en-US-AndrewNeural** — Male, US, deep and authoritative (default)
+2. **en-US-JennyNeural** — Female, US, warm and engaging
+3. **en-GB-ThomasNeural** — Male, UK, measured and compelling
+4. **en-GB-SoniaNeural** — Female, UK, refined and articulate
+5. **en-IN-AartiNeural** — Female, India, clear and expressive
 6. **en-IN-ArjunNeural** — Male, India, confident and clear
 7. **en-AU-NatashaNeural** — Female, Australia, friendly and energetic
 8. **en-AU-WilliamNeural** — Male, Australia, strong and grounded

@@ -20,7 +20,7 @@ Takes an approved script from Phase 6, splits it into timed scenes, and saves th
 | Long video | 16:9 | 8 sec | 22 words |
 | Short | 9:16 | 6 sec | 14 words |
 
-**Image prompts:** cinematic, detailed, no text, no people, historical documentary aesthetic.
+**Image prompts:** era-specific and period-accurate (read from session.json `era` + `art_style`). Image must depict exactly what the narration describes in that historical period.
 **Preserve** exact character/entity names — do not alter spellings.
 
 ## Steps
