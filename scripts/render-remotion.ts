@@ -279,7 +279,12 @@ async function main() {
       serveUrl,
       outputDir: framesDir,
       inputProps: renderProps,
-      concurrency: 1,        // single-frame-at-a-time to minimize memory pressure
+      concurrency: 1,
+      chromiumOptions: {
+        // Force software GL (swiftshader) to prevent GPU browser crashes on long renders
+        gl: 'swiftshader',
+        headless: true,
+      },
       onFrameUpdate: (frame: number) => {
         if (frame % 300 === 0) process.stdout.write(`\n  frame ${frame}/${totalFrames}`);
       },
