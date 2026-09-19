@@ -9,10 +9,12 @@ export const RemotionRoot: React.FC = () => {
   const inputProps = getInputProps<{ scenes: RenderScene[]; config: RenderConfig }>();
   const { scenes = [], config } = inputProps || {};
 
-  // Compute actual total frames from the scene timeline
+  // totalFrames from getInputProps() is the actual timeline length
+  // Set a high ceiling (30 min @ 30fps = 54000 frames) so render never cuts off early
+  const MAX_DURATION = 54000;
   const totalFrames = scenes.length > 0
-    ? scenes[scenes.length - 1].endFrame
-    : 30 * 60; // fallback 30s
+    ? Math.min(scenes[scenes.length - 1].endFrame, MAX_DURATION)
+    : MAX_DURATION;
 
   // Load Bebas Neue font from Google Fonts
   useEffect(() => {

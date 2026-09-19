@@ -254,7 +254,7 @@ async function main() {
   const { server, baseUrl } = await startServer(3456, bundleLocation);
   console.log(`[render] Server URL: ${baseUrl}`);
 
-  const gpuDevice = detectGpuDevice();
+  const gpuDevice = null; // FORCE software encoding — VAAPI causes hangs on this system
   console.log(`[render] GPU: ${gpuDevice || "software (libx264)"}`);
 
   try {
