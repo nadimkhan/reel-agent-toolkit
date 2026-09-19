@@ -254,8 +254,10 @@ async function main() {
   const { server, baseUrl } = await startServer(3456, bundleLocation);
   console.log(`[render] Server URL: ${baseUrl}`);
 
-  const gpuDevice = null; // FORCE software encoding — VAAPI causes hangs on this system
-  console.log(`[render] GPU: ${gpuDevice || "software (libx264)"}`);
+  // Use RX 560 GPU (card1, /dev/dri/renderD128, Baffin) for h264_vaapi encoding
+  // Vega APU (card2, renderD129) is NOT used for encoding
+  const gpuDevice = "/dev/dri/renderD128";
+  console.log(`[render] GPU: ${gpuDevice} (RX 560)`);
 
   try {
     const serveUrl = baseUrl;
@@ -328,9 +330,8 @@ async function main() {
       ffmpegArgs.push(
         "-vaapi_device", gpuDevice,
         "-c:v", "h264_vaapi",
-        "-vf", `format=nv12,hwupload`,
-        "-pix_fmt", "yuv420p",
-        "-b:v", "8M",
+        "-vf", `format=nv12,hwupload=extra_hw_frames=64`,
+        "-qp", "28",
       );
     } else {
       ffmpegArgs.push("-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "22", "-preset", "fast");
