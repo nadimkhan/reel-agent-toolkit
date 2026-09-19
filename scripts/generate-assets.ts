@@ -130,7 +130,7 @@ Return:
 
 const llmResult = await generateText(systemPrompt, `${scriptTitle}\n\n${scriptBody.slice(0, 8000)}`, {
   temperature: 0.3,
-  maxTokens: 4000,
+  maxTokens: 6000,
 })
 
 const parsed = extractJson(llmResult?.content || '')

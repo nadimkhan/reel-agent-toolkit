@@ -2,6 +2,7 @@
  * Pollinations.ai image generation — adapted from ytautomation.
  * Generates images via gen.pollinations.ai, returns base64.
  */
+import 'dotenv/config'
 const POLLINATIONS_API_KEY = process.env.POLLINATIONS_API_KEY || ''
 
 export interface GenImageResult {

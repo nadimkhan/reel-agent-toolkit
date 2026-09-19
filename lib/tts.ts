@@ -2,6 +2,7 @@
  * Azure Cognitive Services TTS — adapted from ytautomation.
  * Uses en-US-JennyNeural by default. Set AZURE_SPEECH_KEY and AZURE_SPEECH_REGION in .env.
  */
+import 'dotenv/config'
 
 const AZURE_KEY = process.env.AZURE_SPEECH_KEY || process.env.AZURE_SPEECH_SUBSCRIPTION_KEY || ''
 const AZURE_REGION = process.env.AZURE_SPEECH_REGION || 'centralindia'
@@ -44,7 +45,8 @@ export async function generateNarration(
   const buf = Buffer.from(await res.arrayBuffer())
   const finalPath = outputPath.endsWith('.mp3') ? outputPath : outputPath + '.mp3'
   const { writeFileSync, mkdirSync } = await import('node:fs')
-  mkdirSync(require('node:path').dirname(finalPath), { recursive: true })
+  const { dirname } = await import('node:path')
+  mkdirSync(dirname(finalPath), { recursive: true })
   writeFileSync(finalPath, buf)
   return finalPath
 }
