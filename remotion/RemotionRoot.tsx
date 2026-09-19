@@ -16,30 +16,24 @@ export const RemotionRoot: React.FC = () => {
     ? Math.min(scenes[scenes.length - 1].endFrame, MAX_DURATION)
     : MAX_DURATION;
 
-  // Load Bebas Neue font from Google Fonts
+  // Load Bebas Neue font from local bundle (no external network requests)
   useEffect(() => {
-    const link = document.createElement('link');
-    link.rel = 'preconnect';
-    link.href = 'https://fonts.googleapis.com';
-    document.head.appendChild(link);
-
-    const link2 = document.createElement('link');
-    link2.rel = 'preconnect';
-    link2.href = 'https://fonts.gstatic.com';
-    link2.crossOrigin = 'anonymous';
-    document.head.appendChild(link2);
-
-    const link3 = document.createElement('link');
-    link3.rel = 'stylesheet';
-    link3.href = 'https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap';
-    document.head.appendChild(link3);
-
+    // Inject @font-face so the font is available as "Bebas Neue"
+    const style = document.createElement('style');
+    style.textContent = `
+      @font-face {
+        font-family: 'Bebas Neue';
+        src: url('/fonts/BebasNeue.woff2') format('woff2');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+    `;
+    document.head.appendChild(style);
     document.title = config?.title || 'Reel';
 
     return () => {
-      [link, link2, link3].forEach(el => {
-        if (el.parentNode) el.parentNode.removeChild(el);
-      });
+      if (style.parentNode) style.parentNode.removeChild(style);
     };
   }, [config?.title]);
 

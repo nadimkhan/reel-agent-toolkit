@@ -280,11 +280,8 @@ async function main() {
       outputDir: framesDir,
       inputProps: renderProps,
       concurrency: 1,
-      chromiumOptions: {
-        // Force software GL (swiftshader) to prevent GPU browser crashes on long renders
-        gl: 'swiftshader',
-        headless: true,
-      },
+      // Use Chrome wrapper with sandbox flags for stability
+      browserExecutable: '/home/nadim/bin/google-chrome-stable',
       onFrameUpdate: (frame: number) => {
         if (frame % 300 === 0) process.stdout.write(`\n  frame ${frame}/${totalFrames}`);
       },

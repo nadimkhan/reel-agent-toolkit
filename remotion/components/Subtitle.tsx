@@ -1,5 +1,5 @@
 // Subtitle overlay — matches ytautomation style
-// Bebas Neue font, ALL CAPS, black semi-transparent background, centered
+// Bebas Neue font (bundled locally), ALL CAPS, black semi-transparent background, centered
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
 
 interface SubtitleProps {
@@ -78,6 +78,8 @@ export const Subtitle: React.FC<SubtitleProps> = ({ narration, sceneDuration, po
             lineHeight: 1.3,
             letterSpacing: '2.5px',
             textShadow: '0 2px 16px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.5)',
+            // Inline @font-face for Bebas Neue from local bundle (no external requests)
+            // The font is loaded via useEffect in RemotionRoot and fonts are served from public/fonts/
           }}
         >
           {currentPhrase}
