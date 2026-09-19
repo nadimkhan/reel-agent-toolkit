@@ -87,6 +87,7 @@ SKILL_MAP=(
     "phase-agents/phase6-daily-content-generator:reel-agent-phase6-daily-content-generator"
     "phase-agents/phase7-scene-generator:reel-agent-phase7-scene-generator"
     "phase-agents/phase8-asset-generator:reel-agent-phase8-asset-generator"
+    "phase-agents/phase9-video-renderer:reel-agent-phase9-video-renderer"
 )
 
 for entry in "${SKILL_MAP[@]}"; do
@@ -116,9 +117,22 @@ for lib in llm pollinations upscale tts asset-generator scene-splitter; do
     fi
 done
 
+# Step 5b: Copy logo from ytautomation (one-time per niche — update logo path here)
+echo ""
+echo "[5b] Checking logo..."
+LOGO_SRC="$YTAUTOMATION_DIR/public/images/logos/rw_logo.png"
+LOGO_DST="$REPO_DIR/public/images/logos/"
+if [ -f "$LOGO_SRC" ]; then
+    mkdir -p "$LOGO_DST"
+    cp "$LOGO_SRC" "$LOGO_DST"
+    echo "  Logo copied: $LOGO_DST"
+else
+    echo "  WARNING: Logo not found at $LOGO_SRC — copy manually if needed"
+fi
+
 # Step 6: Create session base directory
 echo ""
-echo "[6/7] Creating session and niche directories..."
+echo "[6/8] Creating session and niche directories..."
 mkdir -p "$REPO_DIR/sessions"
 mkdir -p "$NICHE_DIR"
 echo "  $REPO_DIR/sessions: OK"
@@ -126,7 +140,7 @@ echo "  $NICHE_DIR: OK"
 
 # Step 7: Env var check
 echo ""
-echo "[7/7] Checking environment variables..."
+echo "[7/8] Checking environment variables..."
 
 check_env() {
     if [ -z "${!1}" ]; then
@@ -146,11 +160,12 @@ echo ""
 echo "Skills installed: 9 phases + orchestrator"
 echo "Sessions: $REPO_DIR/sessions/"
 echo "Niche memories: $NICHE_DIR/"
+echo "Logo: $LOGO_DST"
 echo ""
 echo "Daily workflow:"
-echo "  1. Phase 6: Generate scripts (topics → approve → scripts)"
+echo "  1. Phase 6: Generate scripts"
 echo "  2. Phase 7: Split into scenes"
 echo "  3. Phase 8: Generate images + audio"
-echo "  4. Remotion: Assemble video"
+echo "  4. Phase 9: Render video"
 echo ""
-echo "Run: cd $REPO_DIR && npx tsx scripts/generate-assets.ts <script.md> <slug> [16:9|9:16]"
+echo "Render: npx tsx scripts/render-remotion.ts <slug> <date> <title> [16:9|9:16]"

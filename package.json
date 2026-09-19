@@ -5,13 +5,21 @@
   "type": "module",
   "scripts": {
     "generate-assets": "npx tsx scripts/generate-assets.ts",
-    "remotion:bundle": "npx tsx node_modules/@remotion/bundler/dist/cli.tsx bundle src/index.ts --out-dir build"
+    "render": "npx tsx scripts/render-remotion.ts"
   },
   "dependencies": {
+    "@remotion/bundler": "^4.0.427",
+    "@remotion/cli": "^4.0.427",
+    "@remotion/renderer": "^4.0.427",
     "@types/node": "^22.0.0",
     "dotenv": "^18.0.1",
+    "remotion": "^4.0.427",
     "sharp": "^0.35.4",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0"
   }
 }
