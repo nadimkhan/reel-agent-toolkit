@@ -16,6 +16,36 @@ Takes `scenes.json` from Phase 7 and generates all images + audio for each scene
 - `scene_XXX/image.png` — upscaled image (1920x1080 for 16:9, 1080x1920 for 9:16)
 - `scene_XXX/audio.mp3` — Azure TTS narration
 
+## Pre-Generation: Confirm Art Style, Era, and Voice
+
+Read `sessions/<slug>/<date>/session.json` and confirm:
+- `art_style` (e.g. "historical illustration")
+- `era` (e.g. "1530s Inca Empire")
+- `voice_shortname` (e.g. "en-US-AvaNeural")
+
+If any are missing, ask the user before proceeding. Present available Azure voices:
+
+```
+## Available TTS Voices
+
+Pick a voice for narration. Recommended for documentary:
+
+1. **en-US-AvaNeural** — Female, US, warm and engaging
+2. **en-US-AndrewNeural** — Male, US, deep and authoritative
+3. **en-GB-AdaNeural** — Female, UK, refined and articulate
+4. **en-GB-OllieNeural** — Male, UK, measured and compelling
+5. **en-IN-DiyaNeural** — Female, India, clear and expressive
+6. **en-IN-ArjunNeural** — Male, India, confident and clear
+7. **en-AU-NatashaNeural** — Female, Australia, friendly and energetic
+8. **en-AU-WilliamNeural** — Male, Australia, strong and grounded
+9. **en-CA-ClaraNeural** — Female, Canada, crisp and professional
+10. **en-CA-LiamNeural** — Male, Canada, steady and trustworthy
+
+Enter voice_shortname: <e.g. en-US-AvaNeural>
+```
+
+Save the chosen `voice_shortname` back to `session.json`.
+
 ## Dependencies
 
 Installed by `setup.sh` in the reel-agent-toolkit root:
@@ -34,7 +64,7 @@ Installed by `setup.sh` in the reel-agent-toolkit root:
 
 ### Audio Generation
 - Provider: Azure Cognitive Services TTS
-- Voice: `en-US-JennyNeural` (default) — configurable via `AZURE_VOICE_NAME` env
+- Voice: loaded from `session.json` → `voice_shortname` (defaults to `en-US-JennyNeural` if not set)
 - Format: MP3, 16kHz, 128kbps
 - Audio saved as `scene_XXX/audio.mp3`
 

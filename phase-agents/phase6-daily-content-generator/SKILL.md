@@ -76,9 +76,35 @@ Generate M short topics that:
 Select topics to generate. Say "all" or list numbers.
 ```
 
-## Step 4: Generate Full Scripts (on approval)
+## Step 3b: Ask Art Style and Era (Required for Image Generation)
 
-For each approved topic, write a full script:
+After topic approval but BEFORE generating scripts, ask:
+
+```
+## Image Generation Options
+
+For each video, I need:
+
+1. **Art Style** — pick one:
+   1. Cinematic documentary (film grain, dramatic lighting, realistic)
+   2. Historical illustration (painterly, textured, old-world feel)
+   3. Dramatic cinematic (moody, high contrast, cinematic color grading)
+   4. Period painting (Renaissance/baroque style, canvas texture)
+   5. Modern infographic (clean, educational, annotated maps)
+
+2. **Era / Time Period** — what time frame should images depict?
+   e.g. "1530s Inca Empire", "Victorian London 1888", "Ancient Rome 50 AD"
+   (Be specific — year(s) + location/empire for historical accuracy)
+
+3. **TTS Voice** — pick from available Azure voices:
+   (load from lib/azure-voices-curated.json and present as numbered list)
+
+Enter choices as: art_style=<number>, era=<description>, voice=<shortName>
+```
+
+These values are stored in session.json and passed to Phase 7/8.
+
+## Step 4: Generate Full Scripts (on approval)
 
 ### Long-Form Video Script (10-15 min)
 
@@ -142,7 +168,7 @@ Save:
 - `video-2.md` — full script for video 2 (if N>1)
 - `short-1.md` — short 1 script
 - etc.
-- `session.json` — metadata
+- `session.json` — metadata including art_style, era, voice_shortname
 
 Update niche memory:
 - Append to `sessions` array

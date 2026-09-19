@@ -47,15 +47,31 @@ const today = new Date().toISOString().slice(0, 10) // YYYY-MM-DD
 const scriptFile = process.argv[2]
 const slug = process.argv[3]
 const ratio = (process.argv[4] || '16:9') as '16:9' | '9:16'
+// Optional overrides from args or env
+const optEra = process.argv[5] || process.env.ASSET_ERA || ''
+const optArtStyle = process.argv[6] || process.env.ASSET_ART_STYLE || ''
 
 if (!scriptFile || !slug) {
-  console.error('Usage: npx tsx scripts/generate-assets.ts <script.md> <slug> [16:9|9:16]')
+  console.error('Usage: npx tsx scripts/generate-assets.ts <script.md> <slug> [16:9|9:16] [era] [art-style]')
   process.exit(1)
 }
 if (!existsSync(scriptFile)) {
   console.error(`Script not found: ${scriptFile}`)
   process.exit(1)
 }
+
+// ── Load session.json for art_style / era / voice (if it exists) ───────────────
+const sessionJsonPath = join(sessionDir, 'session.json')
+let sessionData: any = {}
+if (existsSync(sessionJsonPath)) {
+  try {
+    sessionData = JSON.parse(readFileSync(sessionJsonPath, 'utf-8'))
+    console.log(`[generate-assets] Loaded session config: era="${sessionData.era}", art_style="${sessionData.art_style}", voice="${sessionData.voice_shortname}"`)
+  } catch { /* ignore */ }
+}
+
+const era = optEra || sessionData.era || ''
+const artStyle = optArtStyle || sessionData.art_style || ''
 
 // ── Load script ────────────────────────────────────────────────────────────────
 const scriptContent = readFileSync(scriptFile, 'utf-8')
@@ -107,6 +123,15 @@ function extractJson(text: string): any | null {
 
 // ── Step 1: Scene Splitting ───────────────────────────────────────────────────
 console.log(`[generate-assets] Step 1: Splitting "${scriptTitle}" into scenes (${ratio})`)
+if (era) console.log(`[generate-assets] Era context: ${era}`)
+if (artStyle) console.log(`[generate-assets] Art style: ${artStyle}`)
+
+const eraContext = era
+  ? `ERA: Images must depict the ${era}. Include period-accurate clothing, architecture, weapons, and technology. No anachronisms.`
+  : 'ERA: Match the historical period described in the narration.'
+const styleContext = artStyle
+  ? `STYLE: ${artStyle}.`
+  : 'STYLE: Cinematic documentary aesthetic — dramatic lighting, film grain, no text, no people (or minimal silhouette-only figures).'
 
 const systemPrompt = `You are a YouTube video director.
 Split the script into scenes. CRITICAL RULES:
@@ -114,16 +139,18 @@ Split the script into scenes. CRITICAL RULES:
 - Short (9:16): each scene max 6 seconds (~12-14 words)
 - If a scene's narration is too long, SPLIT IT — never cram
 - Each scene's image prompt must depict EXACTLY what that scene's narration describes
-- Image prompts: cinematic, detailed, no text, no people, historical documentary aesthetic
 - Preserve exact character/entity names — do not alter spellings
 - Return ONLY valid JSON (no markdown, no preamble)
+
+${eraContext}
+${styleContext}
 
 Return:
 {
   "scenes": [
     {
       "narration": "exact narration for this scene",
-      "imagePrompt": "visual description matching the narration"
+      "imagePrompt": "visual description of exactly what the narration describes, era-specific and period-accurate, in ${artStyle || 'cinematic documentary'} style"
     }
   ]
 }`
@@ -182,7 +209,7 @@ console.log(`[generate-assets] Total duration: ~${elapsed}s`)
 // ── Step 2: Asset Generation ───────────────────────────────────────────────────
 console.log(`[generate-assets] Step 2: Generating ${scenes.length} scene assets`)
 
-const azureVoice = process.env.AZURE_VOICE_NAME || 'en-US-JennyNeural'
+const azureVoice = process.argv[7] || sessionData.voice_shortname || process.env.AZURE_VOICE_NAME || 'en-US-JennyNeural'
 let imgOk = 0, imgFail = 0, audOk = 0, audFail = 0
 
 const BATCH = 3

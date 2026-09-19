@@ -58,13 +58,28 @@ function clampWords(text: string, maxWords: number): string {
   return partial.trim() || words.slice(0, maxWords).join(' ')
 }
 
+export interface SplitOptions {
+  era?: string       // e.g. "1530s Inca Empire"
+  artStyle?: string  // e.g. "cinematic documentary", "historical illustration"
+}
+
 export async function splitScriptIntoScenes(
   scriptTitle: string,
   scriptText: string,
   ratio: '16:9' | '9:16' = '16:9',
+  options: SplitOptions = {},
 ): Promise<SplitResult> {
+  const { era = '', artStyle = '' } = options
   const maxSecs = ratio === '16:9' ? 8 : 6
   const maxWords = ratio === '16:9' ? 22 : 14
+
+  // Build era/style context for the image prompt instructions
+  const eraContext = era
+    ? `ERA: Images must depict the ${era}. Include period-accurate clothing, architecture, weapons, and technology. No anachronisms.`
+    : 'ERA: Match the historical period described in the narration.'
+  const styleContext = artStyle
+    ? `STYLE: ${artStyle}.`
+    : 'STYLE: Cinematic documentary aesthetic — dramatic lighting, film grain, no text, no people (or minimal, silhouette-only people).'
 
   const systemPrompt = `You are a YouTube video director.
 Split the script into scenes. CRITICAL RULES:
@@ -72,16 +87,18 @@ Split the script into scenes. CRITICAL RULES:
 - Short (9:16): each scene max 6 seconds (~12-14 words)
 - If a scene's narration is too long, SPLIT IT across multiple scenes — never cram
 - Each scene's image prompt must depict EXACTLY what that scene's narration describes
-- Image prompts: cinematic, detailed, no text, no people, historical documentary aesthetic
 - Preserve exact character/entity names — do not alter spellings
 - Return ONLY valid JSON (no markdown, no preamble)
+
+${eraContext}
+${styleContext}
 
 Return:
 {
   "scenes": [
     {
       "narration": "exact narration for this scene",
-      "imagePrompt": "visual description matching the narration"
+      "imagePrompt": "visual description of exactly what the narration describes, era-specific and period-accurate, in ${artStyle || 'cinematic documentary'} style"
     }
   ]
 }`

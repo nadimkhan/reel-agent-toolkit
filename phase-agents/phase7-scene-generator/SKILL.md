@@ -26,9 +26,12 @@ Takes an approved script from Phase 6, splits it into timed scenes, and saves th
 ## Steps
 
 1. Read the approved script file
-2. Run `npx tsx lib/scene-splitter.ts <script.md> [16:9|9:16]`
-   (or call `splitScriptIntoScenes()` directly if using the lib)
-3. Verify `scenes.json` was created in the session dir
+2. Read `session.json` in the same directory — extract `art_style`, `era`, and `voice_shortname`
+3. Run scene splitter with era + art style:
+   ```
+   npx tsx lib/scene-splitter.ts <script.md> [16:9|9:16]
+   ```
+   (The generate-assets script passes era + art style through env or args — if using the lib directly, call `splitScriptIntoScenes(..., { era, artStyle })`)
 4. Present scene table to user for verification:
    ```
    | Scene | Timestamp | Narration (first 50 chars) | Image Prompt |
