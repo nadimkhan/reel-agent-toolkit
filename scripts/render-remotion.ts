@@ -1,8 +1,12 @@
 /**
  * render-remotion.ts
  *
+ * Two-stage render (same pattern as ytautomation):
+ *   Stage 1: renderFrames() — renders each frame as JPEG
+ *   Stage 2: ffmpeg stitch — joins frames + audio into MP4 with h264_vaapi
+ *
  * Reads sessions/<slug>/<date>/assets/manifest.json,
- * measures audio durations, builds timeline, renders via Remotion.
+ * measures audio durations, builds timeline.
  *
  * Usage:
  *   npx tsx scripts/render-remotion.ts <slug> <date> <title> [16:9|9:16]
@@ -12,10 +16,10 @@
  */
 
 import { bundle } from "@remotion/bundler";
-import { renderMedia, selectComposition } from "@remotion/renderer";
+import { renderFrames, selectComposition } from "@remotion/renderer";
 import { readFileSync, mkdirSync, existsSync, statSync, createReadStream } from "node:fs";
 import { join, resolve } from "node:path";
-import { spawn } from "child_process";
+import { spawn, execSync } from "child_process";
 import http from "http";
 import "dotenv/config";
 
@@ -37,7 +41,7 @@ const MANIFEST_PATH = join(ASSETS_DIR, "manifest.json");
 
 // ── Logo config (one-time per niche — update here) ──────────────────────────────
 const LOGO_CONFIG = {
-  src: "/images/logos/rw_logo.png",   // served by static server
+  src: "/images/logos/rw_logo.png",  // served by static server
   position: "top-left" as const,
   sizePx: 60,
   marginPx: 15,
@@ -50,7 +54,25 @@ const DIM = RATIO === "16:9"
 const FPS = 30;
 const BACKGROUND_COLOR = "#000000";
 
-// ── Measure audio duration with ffprobe ────────────────────────────────────────
+// ── Detect GPU for VA-API encoding ───────────────────────────────────────────────
+function detectGpuDevice(): string | null {
+  try {
+    const nodes: string[] = execSync('ls /dev/dri/renderD* 2>/dev/null', { encoding: "utf-8" })
+      .trim().split("\n").filter(Boolean);
+    for (const node of nodes) {
+      try {
+        const devpath = execSync(`udevadm info ${node} 2>/dev/null | grep DEVPATH=`, { encoding: "utf-8" });
+        if (devpath.includes("0000:01:00.0")) {
+          console.log(`[GPU] Selected discrete GPU: RX 560 at ${node}`);
+          return node;
+        }
+      } catch {}
+    }
+  } catch {}
+  return null;
+}
+
+// ── Measure audio duration ───────────────────────────────────────────────────────
 function measureAudioDuration(filePath: string): Promise<number> {
   return new Promise((resolve) => {
     const proc = spawn("ffprobe", [
@@ -67,19 +89,34 @@ function measureAudioDuration(filePath: string): Promise<number> {
   });
 }
 
-// ── Static HTTP server ──────────────────────────────────────────────────────────
+// ── Static server ────────────────────────────────────────────────────────────────
 const MIME: Record<string, string> = {
   ".mp3": "audio/mpeg", ".mp4": "video/mp4",
   ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
   ".gif": "image/gif", ".webp": "image/webp",
+  ".js": "application/javascript",
+  ".html": "text/html",
+  ".ico": "image/x-icon",
 };
 
-function startServer(port: number): Promise<{ server: http.Server; baseUrl: string }> {
+function startServer(port: number, bundleDir: string): Promise<{ server: http.Server; baseUrl: string }> {
   return new Promise((resolve) => {
     const server = http.createServer((req, res) => {
-      const urlPath = (req.url || "").replace(/^\//, "");
-      const filePath = join(PROJECT_ROOT, urlPath);
+      const urlPath = (req.url || "/").split("?")[0].replace(/^\//, "");
 
+      // Serve bundle files
+      if (urlPath === "bundle.js" || urlPath === "bundle.js.map" || urlPath === "index.html" || urlPath === "favicon.ico") {
+        const filePath = join(bundleDir, urlPath);
+        if (existsSync(filePath) && statSync(filePath).isFile()) {
+          const ext = filePath.slice(filePath.lastIndexOf("."));
+          res.writeHead(200, { "Content-Type": MIME[ext] || "application/javascript" });
+          createReadStream(filePath).pipe(res);
+          return;
+        }
+      }
+
+      // Serve project files
+      const filePath = join(PROJECT_ROOT, urlPath);
       const range = req.headers.range;
       if (range && existsSync(filePath) && statSync(filePath).isFile()) {
         const stat = statSync(filePath);
@@ -96,7 +133,6 @@ function startServer(port: number): Promise<{ server: http.Server; baseUrl: stri
         createReadStream(filePath, { start, end }).pipe(res);
         return;
       }
-
       if (existsSync(filePath) && statSync(filePath).isFile()) {
         const ext = filePath.slice(filePath.lastIndexOf("."));
         res.writeHead(200, { "Content-Type": MIME[ext] || "application/octet-stream" });
@@ -184,41 +220,129 @@ async function main() {
     },
   };
 
-  console.log("[render] Starting file server on port 3456...");
-  const { server } = await startServer(3456);
+  // Bundle
+  const BUNDLE_OUT = join(PROJECT_ROOT, "build");
+  mkdirSync(BUNDLE_OUT, { recursive: true });
+  console.log("[render] Bundling Remotion project...");
+  const bundleLocation = await bundle(
+    join(PROJECT_ROOT, "remotion", "index.tsx"),
+    (p: number) => process.stdout.write(` ${Math.round(p * 100)}%`),
+    { outDir: BUNDLE_OUT }
+  );
+  console.log(`\n[render] Bundle dir: ${bundleLocation}`);
+
+  // Start static server
+  console.log("[render] Starting server on port 3456...");
+  const { server, baseUrl } = await startServer(3456, bundleLocation);
+  console.log(`[render] Server URL: ${baseUrl}`);
+
+  const gpuDevice = detectGpuDevice();
+  console.log(`[render] GPU: ${gpuDevice || "software (libx264)"}`);
 
   try {
-    console.log("[render] Bundling Remotion project...");
-    const bundleLocation = await bundle(
-      join(PROJECT_ROOT, "remotion", "index.ts"),
-      (p: number) => process.stdout.write(` ${Math.round(p * 100)}%`),
-      { outDir: join(PROJECT_ROOT, ".remotion", "bundles") }
-    );
-    console.log("\n[render] Selecting composition...");
+    const serveUrl = baseUrl;
 
+    // Select composition
+    console.log("[render] Fetching compositions...");
     const composition = await selectComposition({
-      serveUrl: bundleLocation,
+      serveUrl,
       id: "Video",
       inputProps: renderProps,
     });
-    console.log(`[render] Composition: ${composition.width}x${composition.height} @ ${FPS}fps`);
+    console.log(`[render] Composition: ${composition.width}x${composition.height} @ ${FPS}fps, ${totalFrames} frames`);
 
-    const outputPath = join(OUTPUT_DIR, `${VIDEO_TITLE}.mp4`);
-    console.log(`[render] Rendering -> ${outputPath}`);
-    console.log(`[render] Estimated time: ~${Math.ceil(totalSec * 2 / 60)} minutes...`);
+    const framesDir = join("/tmp", `remotion-frames-${Date.now()}`);
+    mkdirSync(framesDir, { recursive: true });
+    console.log(`[render] Stage 1: Rendering frames to ${framesDir}...`);
 
-    await renderMedia({
+    // Stage 1: render frames
+    await renderFrames({
       composition,
-      serveUrl: bundleLocation,
-      codec: "h264",
-      outputLocation: outputPath,
+      serveUrl,
+      outputDir: framesDir,
       inputProps: renderProps,
-      pixelFormat: "yuv420p",
-      crf: 23,
+      onFrameUpdate: (frame: number) => {
+        if (frame % 300 === 0) process.stdout.write(`\n  frame ${frame}/${totalFrames}`);
+      },
+      onStart: () => console.log("[render] Frame rendering started"),
     });
+    console.log(`\n[render] Stage 1 complete: ${framesDir}`);
 
-    const sizeMB = (statSync(outputPath).size / 1024 / 1024).toFixed(1);
-    console.log(`[render] DONE: ${outputPath} (${sizeMB} MB)`);
+    // Stage 2: stitch with ffmpeg
+    const outputPath = join(OUTPUT_DIR, `${VIDEO_TITLE}.mp4`);
+    console.log(`[render] Stage 2: Stitching with ffmpeg...`);
+
+    // Detect frame padding
+    const frameFiles = (await import("node:fs")).readdirSync(framesDir)
+      .filter(f => f.startsWith("element-") && f.endsWith(".jpeg")).sort();
+    if (frameFiles.length === 0) {
+      console.error("[render] FATAL: No frames rendered");
+      process.exit(1);
+    }
+    const lastFrame = frameFiles[frameFiles.length - 1];
+    const widthMatch = lastFrame.match(/element-(\d+)\.jpeg$/);
+    const paddingWidth = widthMatch ? widthMatch[1].length : 4;
+    const framePattern = join(framesDir, `element-%0${paddingWidth}d.jpeg`);
+    console.log(`[render] Frame pattern: ${framePattern} (${frameFiles.length} frames)`);
+
+    // Build concat list for audio
+    const concatList = join("/tmp", `concat-${Date.now()}.txt`);
+    const concatEntries: string[] = [];
+    for (const scene of scenes) {
+      if (scene.audioSrc && existsSync(scene.audioSrc)) {
+        concatEntries.push(`file '${scene.audioSrc.replace(/'/g, "'\\''")}'`);
+      }
+    }
+
+    const hasAudio = concatEntries.length > 0;
+    const ffmpegArgs: string[] = ["-y", "-r", String(FPS), "-f", "image2", "-start_number", "0", "-i", framePattern];
+
+    if (hasAudio) {
+      (await import("node:fs")).writeFileSync(concatList, concatEntries.join("\n"));
+      ffmpegArgs.push("-f", "concat", "-safe", "0", "-i", concatList);
+    }
+
+    if (gpuDevice) {
+      ffmpegArgs.push(
+        "-vaapi_device", gpuDevice,
+        "-c:v", "h264_vaapi",
+        "-vf", `format=nv12,hwupload`,
+        "-pix_fmt", "yuv420p",
+        "-b:v", "8M",
+      );
+    } else {
+      ffmpegArgs.push("-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "23");
+    }
+
+    ffmpegArgs.push(
+      "-movflags", "+faststart",
+      "-y", outputPath,
+    );
+
+    if (hasAudio) {
+      // Splice audio args before -vaapi_device or at end
+      const vaapiIdx = ffmpegArgs.indexOf("-vaapi_device");
+      const spliceAt = vaapiIdx >= 0 ? vaapiIdx : ffmpegArgs.length - 2;
+      ffmpegArgs.splice(spliceAt, 0, "-map", "0:v", "-map", "1:a", "-c:a", "aac", "-b:a", "192k", "-ac", "2", "-ar", "48000");
+    }
+
+    console.log(`[render] Running ffmpeg...`);
+    const ffmpegResult = execSync(
+      `/usr/bin/ffmpeg ${ffmpegArgs.map(a => `'${a.replace(/'/g, "'\\''")}'`).join(" ")}`,
+      { stdio: ["ignore", "pipe", "pipe"] }
+    );
+
+    // Cleanup
+    execSync(`rm -rf ${framesDir} ${concatList}`, { stdio: "ignore" });
+
+    if (existsSync(outputPath)) {
+      const sizeMB = (statSync(outputPath).size / 1024 / 1024).toFixed(1);
+      console.log(`[render] DONE: ${outputPath} (${sizeMB} MB)`);
+    } else {
+      console.error("[render] FATAL: ffmpeg failed to produce output");
+      console.error(ffmpegResult.toString());
+      process.exit(1);
+    }
   } finally {
     server.close();
     console.log("[render] Server stopped");

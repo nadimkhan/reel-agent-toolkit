@@ -1,7 +1,7 @@
 // Root Video component — assembles scenes with logo and optional music
 import { AbsoluteFill, Sequence, Audio } from 'remotion';
-import { Scene } from './Scene';
-import { Logo } from './Logo';
+import { Scene } from './components/Scene';
+import { Logo } from './components/Logo';
 import { RenderScene, RenderConfig } from './types';
 
 interface VideoProps {
@@ -10,6 +10,9 @@ interface VideoProps {
 }
 
 export const Video: React.FC<VideoProps> = ({ scenes, config }) => {
+  if (!scenes || !config) {
+    return <div style={{ color: "white" }}>Error: missing scenes or config</div>;
+  }
   const totalDuration = scenes.length > 0
     ? scenes[scenes.length - 1].endFrame
     : 0;
