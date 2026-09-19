@@ -1,0 +1,16 @@
+{
+  "name": "reel-agent-toolkit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate-assets": "npx tsx scripts/generate-assets.ts",
+    "remotion:bundle": "npx tsx node_modules/@remotion/bundler/dist/cli.tsx bundle src/index.ts --out-dir build"
+  },
+  "dependencies": {
+    "@types/node": "^22.0.0",
+    "sharp": "^0.35.4",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

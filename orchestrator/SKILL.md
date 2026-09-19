@@ -1,188 +1,89 @@
 ---
 name: reel-agent-orchestrator
-description: Main entry for the AI Viral Reel Script Toolkit. Handles both pipeline mode (new niche/topic) and daily content mode (generate videos and shorts on demand).
+description: Main entry for the AI Viral Reel Script Toolkit. Handles both pipeline mode (new niche) and daily content mode (generate videos and shorts on demand).
 ---
 
-# Reel Agent Toolkit — Orchestrator
+# Reel Agent Orchestrator
 
-## Two Modes
+Multi-agent system for AI Viral Reel content. Two modes:
 
-### Mode 1: Pipeline Mode
-Use when setting up a new niche or a new topic within an existing niche that needs full audience research.
+## Mode A: New Niche Pipeline
 
-**Trigger phrases:** "new niche", "new topic", "start project", "new reel", "setup niche"
-
-### Mode 2: Daily Content Mode
-Use when the user wants to generate video scripts or shorts for an already-researched niche without re-running research.
-
-**Trigger phrases:** "generate", "create content", "make videos", "write scripts", "daily content", "video ideas", followed by a niche name
-
----
-
-## Mode 1: Pipeline Mode
-
-### Step 1: Collect Brief
-Ask for:
-1. Niche
-2. Target Audience (one sentence)
-3. Reel Topic / Idea
-4. Reel Goal (followers / comments / saves / shares / leads-sales)
-5. Language / Tone (Hindi / Hinglish / English / Other)
-
-### Step 2: Initialize Memory
-Memory file: `~/.hermes/reel-agent/niches/<niche-slug>/memory.json`
-- If exists: load and check `research_completed`
-- If not: create from template `~/.hermes/reel-agent-toolkit/memory-templates/niche-memory.json`
-- Save project brief under `project_brief`
-- Set `current_phase = 1`
-
-### Step 3: Run Phases 1-5 with Verification
-Sequentially, with human verification after each:
-
-| Phase | Skill | Task |
-|-------|-------|------|
-| 1 | `reel-agent-phase1-audience-research` | Web research: 10 problems, frustrations, desires, questions, mistakes, objections, emotional drivers, exact language |
-| 2 | `reel-agent-phase2-content-strategy` | Best content angle, belief shift, scroll-stopper, 3 angle options |
-| 3 | `reel-agent-phase3-hook-generator` | 5 text hooks + 5 verbal hooks, pick strongest pair |
-| 4 | `reel-agent-phase4-script-writer` | Full Hook→Value→Solution→CTA script, retention optimized |
-| 5 | `reel-agent-phase5-cta-polish` | 5 CTA options, recommended CTA, on-screen text, hashtags, hook caption |
-
-### Step 4: Save & Present Final Deliverable
-After Phase 5 verification:
 ```
-# FINAL DELIVERABLE — <Niche>
-
-## Audience Insight
-## Best Content Angle
-## Best Text Hook
-## Best Verbal Hook
-## Final Reel Script
-## Retention Improvements
-## 5 CTA Options
-## Final Recommended CTA
-## On-Screen Text / Keywords
-
-Saved to: ~/.hermes/reel-agent/niches/<slug>/memory.json
+User → Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6 → Phase 7 → Phase 8
 ```
 
----
+Run niche init: `npx tsx scripts/init-niche.ts <slug>`
 
-## Mode 2: Daily Content Mode
+## Mode B: Daily Content (existing niche)
 
-### Step 1: Identify Niche
-Parse the user's request:
-- Niche name
-- Number of long-form videos
-- Duration per video
-- Number of shorts
-- Duration per short
-
-Example request: "generate 2 videos of 10 mins and 5 shorts of 30-60 sec for Historical Documentaries"
-
-Extract:
-- Niche: Historical Documentaries
-- Long videos: 2 × 10 min
-- Shorts: 5 × 30-60 sec
-
-### Step 2: Load Niche Memory
-Load `~/.hermes/reel-agent/niches/<niche-slug>/memory.json`
-- Verify `research_completed = true` and `audience_profile` has data
-- If no memory file exists or research not done: tell the user to run Pipeline Mode first
-
-### Step 3: Generate Topic Ideas
-Using niche memory data (audience profile, content angles, hooks, exact language):
-- Generate N topic ideas for long-form videos (matching the stored content angles)
-- Generate M topic ideas for shorts
-
-Present topics for user approval.
-
-### Step 4: On Topic Approval — Generate Full Scripts
-For each approved topic:
-- Write full script (Hook → Value → Solution → CTA)
-- Duration: calibrated to requested length (10 min ≈ 1300-1500 words, 30-60 sec ≈ 80-130 words)
-- Use stored audience language, hooks, and content angle
-- Save each script to `~/.hermes/reel-agent/niches/<slug>/sessions/<session-date>/`
-
-### Step 5: Present Output
-Present all scripts in clean format with:
-- Topic name
-- Duration
-- Full script (TTS-ready)
-- CTA
-
-### Step 6: Save Session
-Save session summary to niche memory under `sessions` array.
-
----
-
-## Memory File Schema
-
-```json
-{
-  "niche": "string",
-  "niche_slug": "string",
-  "audience": "string",
-  "project_brief": {
-    "reel_topic": "string",
-    "reel_goal": "string",
-    "language_tone": "string",
-    "created_at": "ISO date"
-  },
-  "research_completed": false,
-  "audience_profile": {
-    "problems": [],
-    "frustrations": [],
-    "desired_outcomes": [],
-    "questions": [],
-    "mistakes": [],
-    "objections": [],
-    "emotional_drivers": [],
-    "exact_language": []
-  },
-  "strongest_reel_topic": { ... },
-  "content_angle": { ... },
-  "hooks": {
-    "text": [],
-    "verbal": [],
-    "best_text_hook": "string",
-    "best_verbal_hook": "string"
-  },
-  "script": {
-    "final": "string",
-    "retention_improvements": []
-  },
-  "cta": {
-    "options": [],
-    "recommended": "string",
-    "hook_caption": "string",
-    "on_screen_text": [],
-    "hashtags": []
-  },
-  "current_phase": 0,
-  "phases": {
-    "phase1": { "status": "pending", "verified": false, "output": null },
-    "phase2": { "status": "pending", "verified": false, "output": null },
-    "phase3": { "status": "pending", "verified": false, "output": null },
-    "phase4": { "status": "pending", "verified": false, "output": null },
-    "phase5": { "status": "pending", "verified": false, "output": null }
-  },
-  "all_phases_complete": false,
-  "sessions": [
-    {
-      "session_id": "string",
-      "date": "ISO date",
-      "long_videos": [{ "topic": "string", "duration": "string", "script": "string" }],
-      "shorts": [{ "topic": "string", "duration": "string", "script": "string" }]
-    }
-  ],
-  "created_at": "ISO date",
-  "updated_at": "ISO date"
-}
+```
+User → Phase 6 (script) → Phase 7 (scenes) → Phase 8 (assets) → Remotion render
 ```
 
----
+## Pipeline Phases
 
-## Niche Memory Location
+| Phase | Name | Output |
+|-------|------|--------|
+| 1 | Audience Research | `memory.json` — niche, category, platform |
+| 2 | Content Strategy | `memory.json` — angles, hooks, top topics |
+| 3 | Series Design | `memory.json` — series, art style, scene styles |
+| 4 | Script Generation | `sessions/<date>/LF*.md`, `SHORT*.md` |
+| 5 | Script Verification | (human review — never auto-proceed) |
+| 6 | Daily Content | `sessions/<date>/LF*.md`, `SHORT*.md` |
+| 7 | Scene Generator | `sessions/<slug>/<date>/scenes.json` |
+| 8 | Asset Generator | `sessions/<slug>/<date>/assets/` |
 
-All niche data: `~/.hermes/reel-agent/niches/<niche-slug>/memory.json`
-Source repo: `~/.hermes/reel-agent-toolkit/`
+## Memory Files
+
+Niche memories: `~/.hermes/reel-agent/niches/<slug>/memory.json`
+Sessions: `sessions/<slug>/<date>/`
+
+## Aspect Ratio Rules (HARDCODE)
+
+- Long-form videos (10 min): **16:9 landscape** → upscale to **1920x1080**
+- Shorts (30-60 sec): **9:16 portrait** → upscale to **1080x1920**
+
+## Daily Content Workflow
+
+1. User: "generate 2 long-form videos + 2 shorts for [niche]"
+2. Orchestrator: Run Phase 6 → present topics for approval
+3. User: "approve"
+4. Orchestrator: Generate full scripts → save to session dir
+5. User: "approve scenes"
+6. Orchestrator: Run Phase 7 → split scripts into scenes → present scene table
+7. User: "approve"
+8. Orchestrator: Run Phase 8 → generate images + audio
+9. Orchestrator: Report asset manifest → Remotion render ready
+
+## Remotion Render
+
+```bash
+cd ~/projects/reel-agent-toolkit
+npx tsx scripts/render-remotion.ts <slug> <date> <video-title>
+```
+
+## Session Directory Layout
+
+```
+sessions/<slug>/<date>/
+├── memory.json                       ← niche memory snapshot
+├── LF1_<title>.md                    ← Phase 6 long-form scripts
+├── LF2_<title>.md
+├── SHORT1_<title>.md                 ← Phase 6 short scripts
+├── SHORT2_<title>.md
+├── scenes.json                       ← Phase 7 scene breakdown
+└── assets/                           ← Phase 8 assets
+    ├── manifest.json
+    ├── scene_000/
+    │   ├── image.png                 ← upscaled 16:9 or 9:16
+    │   └── audio.mp3                 ← Azure TTS
+    └── ...
+```
+
+## Hardcoded Dependencies
+
+- LLM: Groq (qwen3.8-27b) → Kira fallback
+- Image gen: Pollinations (`flux` model) → sharp upscale to target res
+- TTS: Azure Cognitive Services (`en-US-JennyNeural`)
+- Video assembly: Remotion
