@@ -157,12 +157,13 @@ Return:
 
 const llmResult = await generateText(systemPrompt, `${scriptTitle}\n\n${scriptBody.slice(0, 8000)}`, {
   temperature: 0.3,
-  maxTokens: 6000,
+  maxTokens: 12000,
 })
 
 const parsed = extractJson(llmResult?.content || '')
 if (!parsed || !Array.isArray(parsed.scenes) || parsed.scenes.length === 0) {
-  console.error('[generate-assets] Scene parsing failed:', (llmResult?.content || '').slice(0, 300))
+  const raw = (llmResult?.content || '').slice(0, 2000)
+  console.error('[generate-assets] Scene parsing failed:', raw)
   process.exit(1)
 }
 

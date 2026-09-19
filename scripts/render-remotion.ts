@@ -303,12 +303,11 @@ async function main() {
     const framePattern = join(framesDir, `element-%0${paddingWidth}d.jpeg`);
     console.log(`[render] Frame pattern: ${framePattern} (${frameFiles.length} frames)`);
 
-    // Build concat list for audio
+    // Build concat list for audio — use manifest scenes directly by index
     const concatList = join("/tmp", `concat-${Date.now()}.txt`);
     const concatEntries: string[] = [];
-    for (const scene of scenes) {
-      // Use the original absolute path for ffmpeg concat
-      const audioPath = manifest.scenes[scenes.indexOf(scene)]?.audioPath;
+    for (let i = 0; i < manifest.scenes.length; i++) {
+      const audioPath = manifest.scenes[i]?.audioPath;
       if (audioPath && existsSync(audioPath)) {
         concatEntries.push(`file '${audioPath.replace(/'/g, "'\\''")}'`);
       }
@@ -322,8 +321,7 @@ async function main() {
       ffmpegArgs.push("-f", "concat", "-safe", "0", "-i", concatList);
     }
 
-    if (false && gpuDevice) {
-      // VAAPI disabled — causes crashes on this system
+    if (gpuDevice) {
       ffmpegArgs.push(
         "-vaapi_device", gpuDevice,
         "-c:v", "h264_vaapi",
@@ -335,25 +333,21 @@ async function main() {
       ffmpegArgs.push("-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "22", "-preset", "fast");
     }
 
-    ffmpegArgs.push(
-      "-movflags", "+faststart",
-      "-y", outputPath,
-    );
-
+    // -map flags after video codec, before output
     if (hasAudio) {
-      // Splice audio args before -vaapi_device or at end
-      const vaapiIdx = ffmpegArgs.indexOf("-vaapi_device");
-      const spliceAt = vaapiIdx >= 0 ? vaapiIdx : ffmpegArgs.length - 2;
-      ffmpegArgs.splice(spliceAt, 0, "-map", "0:v", "-map", "1:a", "-c:a", "aac", "-b:a", "192k", "-ac", "2", "-ar", "48000");
+      ffmpegArgs.push("-map", "0:v", "-map", "1:a", "-c:a", "aac", "-b:a", "192k", "-ac", "2", "-ar", "48000");
     }
 
+    // -movflags goes after all codec args but before output filename
+    ffmpegArgs.push("-movflags", "+faststart", "-y", outputPath);
+
     console.log(`[render] Running ffmpeg...`);
-    const ffmpegResult = execSync(
+    execSync(
       `/usr/bin/ffmpeg ${ffmpegArgs.map(a => `'${a.replace(/'/g, "'\\''")}'`).join(" ")}`,
       { stdio: ["ignore", "pipe", "pipe"] }
     );
 
-    // Cleanup
+    // Cleanup temp files
     execSync(`rm -rf ${framesDir} ${concatList}`, { stdio: "ignore" });
 
     if (existsSync(outputPath)) {
@@ -361,7 +355,6 @@ async function main() {
       console.log(`[render] DONE: ${outputPath} (${sizeMB} MB)`);
     } else {
       console.error("[render] FATAL: ffmpeg failed to produce output");
-      console.error(ffmpegResult.toString());
       process.exit(1);
     }
   } finally {
