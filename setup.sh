@@ -62,7 +62,7 @@ KIRA_API_KEY=your_kira_key_here
 POLLINATIONS_API_KEY=your_pollinations_key_here
 AZURE_SPEECH_KEY=your_azure_speech_key_here
 AZURE_SPEECH_REGION=centralindia
-AZURE_VOICE_NAME=en-US-JennyNeural
+AZURE_VOICE_NAME=en-US-AndrewNeural
 ENVEXAMPLE
         echo "  .env.example created — copy to .env and fill in keys"
     fi

@@ -1,12 +1,12 @@
 /**
  * Azure Cognitive Services TTS — adapted from ytautomation.
- * Uses en-US-JennyNeural by default. Set AZURE_SPEECH_KEY and AZURE_SPEECH_REGION in .env.
+ * Uses en-US-AndrewNeural by default. Set AZURE_SPEECH_KEY and AZURE_SPEECH_REGION in .env.
  */
 import 'dotenv/config'
 
 const AZURE_KEY = process.env.AZURE_SPEECH_KEY || process.env.AZURE_SPEECH_SUBSCRIPTION_KEY || ''
 const AZURE_REGION = process.env.AZURE_SPEECH_REGION || 'centralindia'
-const VOICE = process.env.AZURE_VOICE_NAME || 'en-US-JennyNeural'
+const VOICE = process.env.AZURE_VOICE_NAME || 'en-US-AndrewNeural'
 const OUTPUT_FORMAT = 'audio-16khz-128kbitrate-mono-mp3'
 
 function ssml(text: string, voice = VOICE, rate = '1.0'): string {
@@ -53,7 +53,7 @@ export async function generateNarration(
 
 export function azureVoiceList(): string[] {
   return [
-    'en-US-JennyNeural',      // default, friendly
+    'en-US-AndrewNeural',      // default, friendly
     'en-US-GuyNeural',        // male, authoritative
     'en-US-SaraNeural',       // female, calm
     'en-US-BrandonNeural',    // male, deep

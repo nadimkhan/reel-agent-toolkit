@@ -209,7 +209,7 @@ console.log(`[generate-assets] Total duration: ~${elapsed}s`)
 // ── Step 2: Asset Generation ───────────────────────────────────────────────────
 console.log(`[generate-assets] Step 2: Generating ${scenes.length} scene assets`)
 
-const azureVoice = process.argv[7] || sessionData.voice_shortname || process.env.AZURE_VOICE_NAME || 'en-US-JennyNeural'
+const azureVoice = process.argv[7] || sessionData.voice_shortname || process.env.AZURE_VOICE_NAME || 'en-US-AndrewNeural'
 let imgOk = 0, imgFail = 0, audOk = 0, audFail = 0
 
 const BATCH = 3

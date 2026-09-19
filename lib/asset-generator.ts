@@ -196,7 +196,7 @@ async function generateSceneAsset(
   if (!skipAudio) {
     try {
       console.log(`[asset-gen] Scene ${scene.index} generating audio...`)
-      const voice = options.azureVoice || 'en-US-JennyNeural'
+      const voice = options.azureVoice || 'en-US-AndrewNeural'
       await generateNarration(scene.narration, audioFile, voice)
       asset.audioPath = audioFile
       asset.audioSuccess = true

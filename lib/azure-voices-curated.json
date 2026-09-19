@@ -1,63 +1,51 @@
 [
   {
-    "shortName": "en-US-Ava:DragonHDLatestNeural",
-    "displayName": "Ava Dragon HD Latest",
-    "gender": "Female",
-    "locale": "en-US",
-    "localeName": "English (United States)",
-    "voiceType": "NeuralHD",
-    "wpm": null,
-    "status": "GA"
-  },
-  {
-    "shortName": "en-US-Andrew:DragonHDLatestNeural",
-    "displayName": "Andrew Dragon HD Latest",
+    "shortName": "en-US-AndrewNeural",
+    "displayName": "Andrew",
     "gender": "Male",
     "locale": "en-US",
     "localeName": "English (United States)",
-    "voiceType": "NeuralHD",
-    "wpm": null,
-    "status": "GA"
+    "voiceType": "Neural"
   },
   {
-    "shortName": "en-GB-Ada:DragonHDLatestNeural",
-    "displayName": "Ada Dragon HD Latest",
+    "shortName": "en-US-JennyNeural",
+    "displayName": "Jenny",
     "gender": "Female",
-    "locale": "en-GB",
-    "localeName": "English (United Kingdom)",
-    "voiceType": "NeuralHD",
-    "wpm": null,
-    "status": "GA"
+    "locale": "en-US",
+    "localeName": "English (United States)",
+    "voiceType": "Neural"
   },
   {
-    "shortName": "en-GB-Ollie:DragonHDLatestNeural",
-    "displayName": "Ollie Dragon HD Latest",
+    "shortName": "en-GB-ThomasNeural",
+    "displayName": "Thomas",
     "gender": "Male",
     "locale": "en-GB",
     "localeName": "English (United Kingdom)",
-    "voiceType": "NeuralHD",
-    "wpm": null,
-    "status": "GA"
+    "voiceType": "Neural"
   },
   {
-    "shortName": "en-IN-Diya:DragonHDLatestNeural",
-    "displayName": "Diya Dragon HD Latest",
+    "shortName": "en-GB-SoniaNeural",
+    "displayName": "Sonia",
+    "gender": "Female",
+    "locale": "en-GB",
+    "localeName": "English (United Kingdom)",
+    "voiceType": "Neural"
+  },
+  {
+    "shortName": "en-IN-AartiNeural",
+    "displayName": "Aarti",
     "gender": "Female",
     "locale": "en-IN",
     "localeName": "English (India)",
-    "voiceType": "NeuralHD",
-    "wpm": null,
-    "status": "Preview"
+    "voiceType": "Neural"
   },
   {
-    "shortName": "en-IN-Arjun:DragonHDLatestNeural",
-    "displayName": "Arjun Dragon HD Latest",
+    "shortName": "en-IN-ArjunNeural",
+    "displayName": "Arjun",
     "gender": "Male",
     "locale": "en-IN",
     "localeName": "English (India)",
-    "voiceType": "NeuralHD",
-    "wpm": null,
-    "status": "GA"
+    "voiceType": "Neural"
   },
   {
     "shortName": "en-AU-NatashaNeural",
@@ -65,19 +53,15 @@
     "gender": "Female",
     "locale": "en-AU",
     "localeName": "English (Australia)",
-    "voiceType": "Neural",
-    "wpm": "139",
-    "status": "GA"
+    "voiceType": "Neural"
   },
   {
-    "shortName": "en-AU-WilliamMultilingualNeural",
-    "displayName": "William Multilingual",
+    "shortName": "en-AU-WilliamNeural",
+    "displayName": "William",
     "gender": "Male",
     "locale": "en-AU",
     "localeName": "English (Australia)",
-    "voiceType": "Neural",
-    "wpm": null,
-    "status": "GA"
+    "voiceType": "Neural"
   },
   {
     "shortName": "en-CA-ClaraNeural",
@@ -85,9 +69,7 @@
     "gender": "Female",
     "locale": "en-CA",
     "localeName": "English (Canada)",
-    "voiceType": "Neural",
-    "wpm": "167",
-    "status": "GA"
+    "voiceType": "Neural"
   },
   {
     "shortName": "en-CA-LiamNeural",
@@ -95,8 +77,6 @@
     "gender": "Male",
     "locale": "en-CA",
     "localeName": "English (Canada)",
-    "voiceType": "Neural",
-    "wpm": "180",
-    "status": "GA"
+    "voiceType": "Neural"
   }
 ]

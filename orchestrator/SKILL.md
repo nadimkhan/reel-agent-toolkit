@@ -85,5 +85,5 @@ sessions/<slug>/<date>/
 
 - LLM: Groq (qwen3.8-27b) → Kira fallback
 - Image gen: Pollinations (`flux` model) → sharp upscale to target res
-- TTS: Azure Cognitive Services (`en-US-JennyNeural`)
+- TTS: Azure Cognitive Services (`en-US-AndrewNeural`)
 - Video assembly: Remotion

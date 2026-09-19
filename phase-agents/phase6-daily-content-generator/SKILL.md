@@ -99,7 +99,7 @@ For each video, I need:
 3. **TTS Voice** — pick from available Azure voices:
    (load from lib/azure-voices-curated.json and present as numbered list)
 
-Enter choices as: art_style=<number>, era=<description>, voice=<shortName>
+Enter choices as: art_style=<number>, era=<description>, voice=en-US-AndrewNeural  ← default, deep authoritative male
 ```
 
 These values are stored in session.json and passed to Phase 7/8.

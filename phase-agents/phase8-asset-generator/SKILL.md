@@ -41,7 +41,7 @@ Pick a voice for narration. Recommended for documentary:
 9. **en-CA-ClaraNeural** — Female, Canada, crisp and professional
 10. **en-CA-LiamNeural** — Male, Canada, steady and trustworthy
 
-Enter voice_shortname: <e.g. en-US-AvaNeural>
+Enter voice_shortname: en-US-AndrewNeural
 ```
 
 Save the chosen `voice_shortname` back to `session.json`.
@@ -64,7 +64,7 @@ Installed by `setup.sh` in the reel-agent-toolkit root:
 
 ### Audio Generation
 - Provider: Azure Cognitive Services TTS
-- Voice: loaded from `session.json` → `voice_shortname` (defaults to `en-US-JennyNeural` if not set)
+- Voice: loaded from `session.json` → `voice_shortname` (defaults to `en-US-AndrewNeural` if not set)
 - Format: MP3, 16kHz, 128kbps
 - Audio saved as `scene_XXX/audio.mp3`
 
